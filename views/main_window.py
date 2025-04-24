@@ -1,9 +1,11 @@
-from PySide6.QtCore import Qt, QSize
+from PySide6.QtCore import Qt, QSize, QSettings
 from PySide6.QtGui import QIcon, QPixmap, QIntValidator, QAction
 from PySide6.QtWidgets import QWidget, QLineEdit, QVBoxLayout, QLabel, QPushButton, QProgressBar, \
     QGridLayout, QMenu
 
 from utils.assets_path import resource_path
+from utils.constants import SHEET_ID_KEY, CREDENTIALS_KEY
+from views.settings_dialog import SettingsDialog
 
 
 class MainWindow(QWidget):
@@ -11,6 +13,8 @@ class MainWindow(QWidget):
         super().__init__()
         self.setWindowTitle("RRC Tool - ASSTEC")
         self.setFixedSize(QSize(400, 400))
+
+        self.settings = QSettings("CEBRA", "RRC_Tool")
 
         # Components
         self.logo = QLabel()
@@ -39,7 +43,7 @@ class MainWindow(QWidget):
 
         self._setup_layout()
 
-    def _show_context_menu(self, pos):
+    def _show_context_menu(self, pos) -> None:
         menu = QMenu(self)
 
         settings_option = QAction(QIcon(resource_path("assets/icons/settings.svg")), "Configurações", self)
@@ -48,15 +52,22 @@ class MainWindow(QWidget):
         menu.addAction(settings_option)
         menu.addSeparator()
         menu.addAction(exit_option)
-
         action = menu.exec(self.mapToGlobal(pos))
 
         if action == settings_option:
-            print("SETTINGS")
+            self._show_settings_dialog()
         elif action == exit_option:
             self.close()
 
-    def _setup_layout(self):
+    def _show_settings_dialog(self) -> None:
+        saved_data = (self.settings.value(SHEET_ID_KEY, ""), self.settings.value(CREDENTIALS_KEY, ""))
+        dialog = SettingsDialog(saved_data, self)
+        if dialog.exec():
+            values = dialog.get_values()
+            self.settings.setValue(SHEET_ID_KEY, values[0])
+            self.settings.setValue(CREDENTIALS_KEY, values[1])
+
+    def _setup_layout(self) -> None:
         main_layout = QVBoxLayout(self)
         main_layout.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop)
 
