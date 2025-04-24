@@ -1,7 +1,7 @@
 from PySide6.QtCore import Qt, QSize
-from PySide6.QtGui import QIcon, QPixmap, QIntValidator
+from PySide6.QtGui import QIcon, QPixmap, QIntValidator, QAction
 from PySide6.QtWidgets import QWidget, QLineEdit, QVBoxLayout, QLabel, QPushButton, QProgressBar, \
-    QGridLayout
+    QGridLayout, QMenu
 
 from utils.assets_path import resource_path
 
@@ -34,7 +34,27 @@ class MainWindow(QWidget):
         self.generate_document_button = QPushButton(QIcon(resource_path("assets/icons/document-add.svg")), " Gerar RRC")
         self.generate_document_button.setIconSize(QSize(30, 30))
 
+        self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        self.customContextMenuRequested.connect(self._show_context_menu)
+
         self._setup_layout()
+
+    def _show_context_menu(self, pos):
+        menu = QMenu(self)
+
+        settings_option = QAction(QIcon(resource_path("assets/icons/settings.svg")), "Configurações", self)
+        exit_option = QAction(QIcon(resource_path("assets/icons/exit.svg")), "Sair", self)
+
+        menu.addAction(settings_option)
+        menu.addSeparator()
+        menu.addAction(exit_option)
+
+        action = menu.exec(self.mapToGlobal(pos))
+
+        if action == settings_option:
+            print("SETTINGS")
+        elif action == exit_option:
+            self.close()
 
     def _setup_layout(self):
         main_layout = QVBoxLayout(self)
