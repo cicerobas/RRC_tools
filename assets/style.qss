@@ -1,0 +1,43 @@
+* {
+  font-family: "Segoe UI", Arial, sans-serif;
+  font-size: 16px;
+}
+
+QPushButton {
+  background-color: #4c5d6d;
+  color: white;
+  border-radius: 5px;
+  padding: 5px 10px;
+  height: 30px;
+}
+QPushButton:hover {
+  background-color: #2980b9;
+}
+QPushButton:pressed {
+  background-color: #1c5986;
+}
+
+QLineEdit {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+  height: 30px;
+  background-color: white;
+}
+QLineEdit:focus {
+  border: 1px solid #3498db;
+}
+QProgressBar {
+  border: 1px solid #bbb;
+  border-radius: 5px;
+  background-color: #eee;
+}
+QProgressBar::chunk {
+  background-color: #0078d7;
+  width: 10px;
+}
+#status_label {
+  font-weight: bold;
+  font-size: 24px;
+  margin-top: 5px;
+}
