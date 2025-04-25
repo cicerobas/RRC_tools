@@ -1,8 +1,9 @@
 from PySide6.QtCore import Qt, QSize, QSettings
 from PySide6.QtGui import QIcon, QPixmap, QIntValidator, QAction
 from PySide6.QtWidgets import QWidget, QLineEdit, QVBoxLayout, QLabel, QPushButton, QProgressBar, \
-    QGridLayout, QMenu
+    QGridLayout, QMenu, QMessageBox
 
+from services.gsheets_service import GSheetsService
 from utils.assets_path import resource_path
 from utils.constants import SHEET_ID_KEY, CREDENTIALS_KEY
 from views.settings_dialog import SettingsDialog
@@ -15,6 +16,8 @@ class MainWindow(QWidget):
         self.setFixedSize(QSize(400, 400))
 
         self.settings = QSettings("CEBRA", "RRC_Tool")
+        self.access_data = self._load_access_data()
+        self.gsheets_service = GSheetsService(self.access_data) if self._has_valid_access_data() else None
 
         # Components
         self.logo = QLabel()
@@ -32,16 +35,37 @@ class MainWindow(QWidget):
         self.asstec_search_bar.setValidator(QIntValidator())
         self.asstec_search_bar.setPlaceholderText("Nº da ASSTEC")
 
-        self.status_label = QLabel("Placeholder...")
-        self.status_label.setObjectName("status_label")
-
         self.generate_document_button = QPushButton(QIcon(resource_path("assets/icons/document-add.svg")), " Gerar RRC")
         self.generate_document_button.setIconSize(QSize(30, 30))
 
         self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.customContextMenuRequested.connect(self._show_context_menu)
 
+        self.generate_document_button.clicked.connect(self._generate_document)
+
         self._setup_layout()
+
+    def _generate_document(self) -> None:
+        asstec_number = self.asstec_search_bar.text()
+        if len(asstec_number) < 5:
+            return
+
+        self._toggle_loading_ui()
+        row = self.gsheets_service.check_valid_asstec(asstec_number)
+        if row >= 0:
+            fields_validation = self.gsheets_service.validate_asstec_required_fields(row)
+            if fields_validation != "":
+                QMessageBox.warning(self, "Atenção", fields_validation)
+            else:
+                items_data = self.gsheets_service.get_items_data(asstec_number)
+                if len(items_data) == 0:
+                    QMessageBox.warning(self, "Atenção", f"Asstec Nº: {asstec_number}\nSem itens registrados!")
+                else:
+                    pass
+        else:
+            QMessageBox.critical(self, "Atenção", f"Asstec Nº: {asstec_number}\nNão encontrada!")
+
+        self._toggle_loading_ui()
 
     def _show_context_menu(self, pos) -> None:
         menu = QMenu(self)
@@ -60,12 +84,34 @@ class MainWindow(QWidget):
             self.close()
 
     def _show_settings_dialog(self) -> None:
-        saved_data = (self.settings.value(SHEET_ID_KEY, ""), self.settings.value(CREDENTIALS_KEY, ""))
-        dialog = SettingsDialog(saved_data, self)
+        dialog = SettingsDialog(self.access_data, self)
         if dialog.exec():
             values = dialog.get_values()
             self.settings.setValue(SHEET_ID_KEY, values[0])
             self.settings.setValue(CREDENTIALS_KEY, values[1])
+            self.close()
+
+    def _load_access_data(self) -> tuple:
+        """Load access data from settings."""
+        return (
+            self.settings.value(SHEET_ID_KEY, ""),
+            self.settings.value(CREDENTIALS_KEY, "")
+        )
+
+    def _has_valid_access_data(self) -> bool:
+        """Check if access data contains valid (non-empty) values."""
+        return all(self.access_data)
+
+    def _toggle_loading_ui(self) -> None:
+        if self.generate_document_button.isEnabled():
+            self.generate_document_button.setEnabled(False)
+        else:
+            self.generate_document_button.setEnabled(True)
+
+        if self.progress_bar.isVisible():
+            self.progress_bar.setVisible(False)
+        else:
+            self.progress_bar.setVisible(True)
 
     def _setup_layout(self) -> None:
         main_layout = QVBoxLayout(self)
@@ -81,8 +127,7 @@ class MainWindow(QWidget):
         g_layout.addWidget(self.asstec_search_bar, 0, 0, 1, 4)
         g_layout.addWidget(progress_widget, 1, 0, 1, 4)
         g_layout.addWidget(self.generate_document_button, 2, 1, 1, 2)
-        g_layout.addWidget(self.status_label, 3, 0, 1, 4)
 
         main_layout.addWidget(self.logo)
-        main_layout.addSpacing(10)
+        main_layout.addSpacing(20)
         main_layout.addLayout(g_layout)

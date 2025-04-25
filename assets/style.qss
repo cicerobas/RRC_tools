@@ -36,8 +36,3 @@ QProgressBar::chunk {
   background-color: #0078d7;
   width: 10px;
 }
-#status_label {
-  font-weight: bold;
-  font-size: 24px;
-  margin-top: 5px;
-}
