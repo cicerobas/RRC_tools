@@ -1,11 +1,13 @@
 from PySide6.QtCore import Qt, QSize, QSettings
 from PySide6.QtGui import QIcon, QPixmap, QIntValidator, QAction
 from PySide6.QtWidgets import QWidget, QLineEdit, QVBoxLayout, QLabel, QPushButton, QProgressBar, \
-    QGridLayout, QMenu, QMessageBox
+    QGridLayout, QMenu, QMessageBox, QFileDialog
+from pandas import DataFrame
 
 from services.gsheets_service import GSheetsService
 from utils.assets_path import resource_path
 from utils.constants import SHEET_ID_KEY, CREDENTIALS_KEY
+from utils.pdf_document_utils import generate_pdf, handle_asstec_data
 from views.settings_dialog import SettingsDialog
 
 
@@ -51,17 +53,25 @@ class MainWindow(QWidget):
             return
 
         self._toggle_loading_ui()
-        row = self.gsheets_service.check_valid_asstec(asstec_number)
+        row = self.gsheets_service.find_asstec_row(asstec_number)
         if row >= 0:
-            fields_validation = self.gsheets_service.validate_asstec_required_fields(row)
-            if fields_validation != "":
-                QMessageBox.warning(self, "Atenção", fields_validation)
+            asstec_data = self.gsheets_service.validate_asstec_required_data(row)
+            if isinstance(asstec_data, str):
+                QMessageBox.warning(self, "Atenção", asstec_data)
             else:
                 items_data = self.gsheets_service.get_items_data(asstec_number)
-                if len(items_data) == 0:
-                    QMessageBox.warning(self, "Atenção", f"Asstec Nº: {asstec_number}\nSem itens registrados!")
+                if isinstance(items_data, DataFrame):
+                    save_path = QFileDialog.getExistingDirectory(self, "Select a Directory", )
+                    if save_path:
+                        document_data = {"CLIENTE": asstec_data[2], "GRUPO": asstec_data[3], "ASSTEC": asstec_data[1],
+                                         "NFE": asstec_data[4],
+                                         "RESPONSAVEL": asstec_data[8]}
+                        formated_data = handle_asstec_data(document_data, items_data)
+                        response = generate_pdf(formated_data, save_path)
+                        QMessageBox.information(self, "Concluído", f"Arquivo salvo em:\n{response}")
+                        self.asstec_search_bar.setText("")
                 else:
-                    pass
+                    QMessageBox.warning(self, "Atenção", f"Asstec Nº: {asstec_number}\nSem itens registrados!")
         else:
             QMessageBox.critical(self, "Atenção", f"Asstec Nº: {asstec_number}\nNão encontrada!")
 

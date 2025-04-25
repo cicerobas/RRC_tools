@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css"/>
+    <title>Document</title>
+</head>
+<body>
+<div class="data_container">
+    <div class="data_header"><strong>Nº DE SERIE:</strong></div>
+    <div class="text_data">
+        {{ NUM_SERIE | safe }}
+    </div>
+    <div class="data_header"><strong>DESCRIÇÃO DA RECLAMAÇÃO:</strong></div>
+    <div class="text_data">
+        {% for linha in DESCRICAO %}
+        {{ linha }}<br/>
+        {% endfor %}
+    </div>
+    <div class="data_header"><strong>SITUAÇÃO DAS FONTES:</strong></div>
+    <div class="text_data">
+        {% for linha in SITUACAO %}
+        {{ linha }}<br/>
+        {% endfor %}
+    </div>
+    <div class="data_header"><strong>CAUSA FUNDAMENTAL:</strong></div>
+    <div class="text_data">
+        {% for linha in CAUSA %}
+        {{ linha }}<br/>
+        {% endfor %}
+    </div>
+    <div class="data_header"><strong>AÇÃO IMEDIATA:</strong></div>
+    <div class="text_data">
+        {% for linha in ACAO %}
+        {{ linha }}<br/>
+        {% endfor %}
+    </div>
+    <div class="data_header">
+        <strong>AVALIAÇÃO DA CAUSA FUNDAMENTAL:</strong>
+    </div>
+    <div class="text_data">
+        {% for linha in PARECER %}
+        {{ linha }}<br/>
+        {% endfor %}
+    </div>
+</div>
+</body>
+</html>

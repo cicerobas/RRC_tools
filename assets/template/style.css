@@ -1,0 +1,41 @@
+:root {
+  --font-family: Arial, sans-serif;
+  --base-font-size: 12px;
+  --header-font-size: 14px;
+  --background-color: #e0e0e0;
+  --border-color: black;
+  --padding: 5px;
+}
+
+@page {
+  size: A4;
+  margin: 1cm;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--base-font-size);
+}
+
+.data_container {
+  border: 1px solid var(--border-color);
+  border-top: none;
+}
+
+.data_header {
+  background-color: var(--background-color);
+  text-align: center;
+  font-size: var(--header-font-size);
+  border: 1px solid var(--border-color);
+  border-left: none;
+  border-right: none;
+}
+
+.text_data {
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  page-break-inside: auto;
+  padding: var(--padding);
+  margin: 0;
+}
