@@ -1,49 +1,75 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="style.css"/>
     <title>Document</title>
 </head>
 <body>
-<div class="data_container">
-    <div class="data_header"><strong>Nº DE SERIE:</strong></div>
-    <div class="text_data">
-        {{ NUM_SERIE | safe }}
+<header>
+    <div class="doc_header">
+        <img src="logo.png" class="logo"/>
+        <div class="title">
+            <h3>RELATÓRIO DE RECLAMAÇÃO DO CLIENTE<br/>(RRC)</h3>
+        </div>
+        <div class="doc_id">
+            <label>Número:</label>
+            <input type="text"/>
+            <label>Data de Emissão:</label>
+            <input type="text"/>
+        </div>
+        <div class="doc_info">
+            <div class="info_text">
+                <strong>CÓDIGO:</strong> RQ-CQA008<br/>
+                <strong>EMISSÃO:</strong> 21/09/2004<br/>
+                <strong>REVISÃO:</strong> 1.6<br/>
+                <strong>DATA:</strong> 10/01/2024<br/>
+                <strong>PÁGINA:</strong> 01/01
+            </div>
+        </div>
     </div>
+    <div class="form_row row_1">
+        <div class="field"><label>CLIENTE:</label><input type="text" value="{{ CLIENTE }}"/></div>
+        <div class="field"><label>CONTATO:</label><input type="text"/></div>
+    </div>
+    <div class="form_row row_2">
+        <div class="field"><label>PRODUTO:</label><input type="text" value="{{ GRUPO }}"/></div>
+        <div class="field"><label>ASSTEC:</label><input type="text" value="{{ ASSTEC }}"/></div>
+        <div class="field last"><label>NFe:</label><input type="text" value="{{ NFE }}"/></div>
+    </div>
+</header>
+<section>
+    <div class="data_header"><strong>Nº DE SERIE:</strong></div>
+    <div class="text_data">{{ NUM_SERIE | safe }}</div>
     <div class="data_header"><strong>DESCRIÇÃO DA RECLAMAÇÃO:</strong></div>
     <div class="text_data">
-        {% for linha in DESCRICAO %}
-        {{ linha }}<br/>
+        {% for linha in DESCRICAO %} {{ linha }}<br/>
         {% endfor %}
     </div>
     <div class="data_header"><strong>SITUAÇÃO DAS FONTES:</strong></div>
     <div class="text_data">
-        {% for linha in SITUACAO %}
-        {{ linha }}<br/>
+        {% for linha in SITUACAO %} {{ linha }}<br/>
         {% endfor %}
     </div>
     <div class="data_header"><strong>CAUSA FUNDAMENTAL:</strong></div>
     <div class="text_data">
-        {% for linha in CAUSA %}
-        {{ linha }}<br/>
+        {% for linha in CAUSA %} {{ linha }}<br/>
         {% endfor %}
     </div>
     <div class="data_header"><strong>AÇÃO IMEDIATA:</strong></div>
     <div class="text_data">
-        {% for linha in ACAO %}
-        {{ linha }}<br/>
+        {% for linha in ACAO %} {{ linha }}<br/>
         {% endfor %}
     </div>
     <div class="data_header">
         <strong>AVALIAÇÃO DA CAUSA FUNDAMENTAL:</strong>
     </div>
     <div class="text_data">
-        {% for linha in PARECER %}
-        {{ linha }}<br/>
+        {% for linha in PARECER %} {{ linha }}<br/>
         {% endfor %}
     </div>
-</div>
+</section>
+<footer></footer>
 </body>
 </html>
