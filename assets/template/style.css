@@ -114,9 +114,38 @@ header {
   width: 100%;
 }
 
+.row_3 .field {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.row_3 .field {
+  width: 70%;
+}
+
+.row_3 .field.date {
+  width: 30%;
+}
+
+.row_4 .field {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.row_4 .field {
+  width: 60%;
+}
+
+.row_4 .field.date {
+  width: 40%;
+}
+
 section {
   border: 1px solid var(--border-color);
   border-top: none;
+  margin-bottom: 10px;
 }
 
 .data_header {
@@ -126,6 +155,15 @@ section {
   border: 1px solid var(--border-color);
   border-left: none;
   border-right: none;
+  padding: 1px;
+}
+
+.data_header span {
+  font-size: 10px;
+}
+
+.data_header.no_bottom {
+  border-bottom: none;
 }
 
 .text_data {
@@ -135,4 +173,97 @@ section {
   page-break-inside: auto;
   padding: var(--padding);
   margin: 0;
+}
+
+footer {
+  border: 1px solid var(--border-color);
+  margin-bottom: 10px;
+}
+
+.footer_bg {
+  background-color: var(--background-color);
+  padding: var(--padding);
+  font-size: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.footer_row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.footer_row input {
+  flex: 1;
+}
+
+.footer_options {
+  display: flex;
+  align-items: center;
+}
+
+.radio_btn {
+  height: 14px;
+  width: 14px;
+  border-radius: 100px;
+  border: 1px solid black;
+  display: block;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.rag_row {
+  justify-content: right;
+}
+
+.rag_row input {
+  flex: none;
+  width: 40%;
+}
+
+.divider {
+  border-bottom: 1px solid black;
+  height: 0px;
+  width: 100%;
+}
+
+table {
+  width: 100%;
+  text-align: center;
+  border-collapse: collapse;
+}
+
+table #actions_th {
+  width: 50%;
+}
+
+th,
+td {
+  border: 1px solid black;
+}
+
+table tr {
+  height: 20px;
+}
+
+table td:first-child,
+table th:first-child {
+  border-left: none;
+}
+
+table td:last-child,
+table th:last-child {
+  border-right: none;
+}
+
+table tr:first-child td,
+table tr:first-child th {
+  border-top: none;
+}
+
+table tr:last-child td,
+table tr:last-child th {
+  border-bottom: none;
 }
