@@ -24,6 +24,7 @@ class SettingsDialog(QDialog):
         self._setup_layout()
 
     def get_values(self) -> tuple[str, str]:
+        """Returns the values entered in the fields."""
         return self.sheet_id_field.text(), self.credentials_field.toPlainText()
 
     def _setup_layout(self) -> None:

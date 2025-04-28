@@ -12,6 +12,7 @@ template = env.get_template('template.html')
 
 
 def generate_pdf(formated_data: dict, save_path: str) -> str:
+    """Generates a PDF file from the template."""
     html_document = template.render(formated_data)
     file_name = f'RRC ASSTEC {formated_data["ASSTEC"]} {formated_data["GRUPO"]} - {formated_data["CLIENTE"]}'
     file_path = f"{save_path}/{file_name}.pdf"
@@ -22,6 +23,7 @@ def generate_pdf(formated_data: dict, save_path: str) -> str:
 
 
 def handle_asstec_data(document_data: dict, items_data: DataFrame) -> dict:
+    """Formats the data to be used in the template."""
     num_serie = items_data["num_serie"].to_list()
     descricao = [f"{row['num_serie']}: {row['defeito_c']}" for _, row in items_data.iterrows()]
     situacao = [f"{row['num_serie']}: {row['situacao']}" for _, row in items_data.iterrows()]

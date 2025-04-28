@@ -48,6 +48,7 @@ class MainWindow(QWidget):
         self._setup_layout()
 
     def _generate_document(self) -> None:
+        """Checks if the ASSTEC number is valid and generates the PDF document."""
         asstec_number = self.asstec_search_bar.text()
         if len(asstec_number) < 5:
             return
@@ -78,6 +79,7 @@ class MainWindow(QWidget):
         self._toggle_loading_ui()
 
     def _show_context_menu(self, pos) -> None:
+        """Shows a context menu when the user right-clicks on the widget."""
         menu = QMenu(self)
 
         settings_option = QAction(QIcon(resource_path("assets/icons/settings.svg")), "Configurações", self)
@@ -94,6 +96,7 @@ class MainWindow(QWidget):
             self.close()
 
     def _show_settings_dialog(self) -> None:
+        """Shows a settings dialog and updates access data."""
         dialog = SettingsDialog(self.access_data, self)
         if dialog.exec():
             values = dialog.get_values()
@@ -113,6 +116,7 @@ class MainWindow(QWidget):
         return all(self.access_data)
 
     def _toggle_loading_ui(self) -> None:
+        """Toggles the loading UI elements."""
         if self.generate_document_button.isEnabled():
             self.generate_document_button.setEnabled(False)
         else:

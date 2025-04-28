@@ -13,6 +13,7 @@ def load_stylesheet(file_path: str) -> str:
 
 
 def center_window(window) -> None:
+    """Centers the window on the screen."""
     screen = QApplication.primaryScreen()
     screen_geometry = screen.availableGeometry()
     screen_center = screen_geometry.center()

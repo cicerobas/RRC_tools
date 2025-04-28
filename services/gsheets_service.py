@@ -34,21 +34,25 @@ class GSheetsService:
         self.items_sheet = self.spreadsheet.get_worksheet(1)
 
     def find_asstec_row(self, asstec_number: str) -> int:
+        """Finds the row where the ASSTEC number is located."""
         result = self.asstec_sheet.find(asstec_number, in_column=2)
         return result.row if result else -1
 
     def validate_asstec_required_data(self, row: int) -> str | list[str]:
+        """Validates the ASSTEC required data."""
         asstec_data = self.asstec_sheet.row_values(row)
         missing_field = self._has_required_fields(asstec_data)
         return f"O campo [{missing_field}] é obrigatório!" if missing_field else asstec_data
 
     def _has_required_fields(self, asstec_data: list[str]) -> str | None:
+        """Checks if the ASSTEC has all required fields."""
         for index, field_name in self.REQUIRED_FIELDS.items():
             if not asstec_data[index]:
                 return field_name
         return None
 
     def get_items_data(self, asstec_number: str) -> DataFrame | None:
+        """Gets the [items] data from the items_sheet."""
         data_range = self.items_sheet.findall(asstec_number, in_column=1)
         if data_range:
             return pd.DataFrame(
