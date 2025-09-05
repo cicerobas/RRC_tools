@@ -14,7 +14,7 @@ MarkupSafe==3.0.2
 numpy==2.2.5
 oauthlib==3.2.2
 pandas==2.2.3
-pillow==11.2.1
+pillow==11.3.0
 pyasn1==0.6.1
 pyasn1_modules==0.4.2
 pycparser==2.22
